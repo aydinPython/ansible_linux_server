@@ -1,0 +1,41 @@
+---
+- name: Create Users and Groups on Linux Hosts
+  hosts: linux
+  become: yes
+  tasks:
+    - name: Create Groups on Linux Using Loop
+      ansible.builtin.group:
+        name: '{{group.name}}'
+        gid: '{{group.gid}}'
+        state: present
+      loop:
+      - name: network
+        gid: 1111
+      - name: system
+        gid: 2222
+      - name: database
+        gid: 3333
+      loop_control:
+        loop_var: group
+    - name: Create Users on Linux Using Loop
+      user:
+        name: '{{username.name}}'
+        uid: '{{username.uid}}'
+        group: '{{username.gid}}'
+        shell: '{{username.sh}}'
+        state: present
+      loop:
+      - name: user1
+        uid: 1011
+        gid: 1111
+        sh: /bin/bash
+      - name: user2
+        uid: 2022
+        gid: 2222
+        sh: /bin/zsh
+      - name: user3
+        uid: 3033
+        gid: 3333
+        sh: /bin/zsh
+      loop_control:
+        loop_var: username
