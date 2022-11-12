@@ -1,0 +1,18 @@
+- hosts: linux
+  gather_facts: true
+  tasks:
+    - name: Ansible​ fact OS 
+      debug:
+        msg: "{{ ansible_facts['ens33']['ipv4']['address']}}"
+      register: addr_output
+
+    - name: Print addr_output
+      debug:
+        var: addr_output['msg']
+
+    - name: Condition
+      command: /sbin/shutdown -t now
+      when:
+        - addr_output['msg'] == "192.168.37.142"
+      when:
+        - addr_output['msg'] == "192.168.37.143"
